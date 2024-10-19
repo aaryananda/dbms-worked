@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Client</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+    <script>
+        function validateForm() {
+            let invoiceId = document.getElementById('invoice_id').value;
+            let clientId = document.getElementById('client_id').value;
+            let serviceId = document.getElementById('service_id').value;
+            let invoiceDate = document.getElementById('invoice_date').value;
+            let totalAmount = document.getElementById('total_amount').value;
+            let emailId = document.getElementById('email_id').value;
+            let errorMessage = '';
+
+            // Regular expression for alphanumeric check
+            let alphanumericRegex = /^[A-Za-z0-9]+$/;
+            let nameRegex = /\d/;  // Used to check if fields contain digits in invalid places
+            let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;  // Regular expression for basic email validation
+
+            if (nameRegex.test(invoiceId)) {
+                errorMessage += 'Invoice ID should not contain numbers.\n';
+            }
+
+            if (!alphanumericRegex.test(clientId)) {
+                errorMessage += 'Client ID can only contain letters and numbers.\n';
+            }
+
+            if (nameRegex.test(serviceId)) {
+                errorMessage += 'Service ID should not contain numbers.\n';
+            }
+
+            if (invoiceDate === '') {
+                errorMessage += 'Invoice Date is required.\n';
+            }
+
+            if (totalAmount === '') {
+                errorMessage += 'Total Amount is required.\n';
+            }
+
+            if (!emailRegex.test(emailId)) {
+                errorMessage += 'Email ID is invalid.\n';
+            }
+
+            if (errorMessage) {
+                document.getElementById('error-message').innerText = errorMessage;
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Invoice</h1>
+        <div id="error-message" class="error"></div>
+        <form action="/client/add" method="post" onsubmit="return validateForm()">
+            <div class="form-group">
+                <label for="client_id">Client ID:</label>
+                <input type="text" class="form-control" id="client_id" name="client_id" required>
+            </div>
+            <div class="form-group">
+                <label for="invoice_id">Invoice ID:</label>
+                <input type="text" class="form-control" id="invoice_id" name="invoice_id" required>
+            </div>
+            <div class="form-group">
+                <label for="service_id">Service ID:</label>
+                <input type="text" class="form-control" id="service_id" name="service_id" required>
+            </div>
+            <div class="form-group">
+                <label for="invoice_date">Invoice Date:</label>
+                <input type="date" class="form-control" id="invoice_date" name="invoice_date" required>
+            </div>
+            <div class="form-group">
+                <label for="total_amount">Total Amount:</label>
+                <input type="number" class="form-control" id="total_amount" name="total_amount" required>
+            </div>
+            <div class="form-group">
+                <label for="email_id">Email ID:</label>
+                <input type="email" class="form-control" id="email_id" name="email_id" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Send invoice</button>
+        </form>
+        <a href="/clients" class="btn btn-secondary mt-3">Back to Clients</a>
+    </div>
+</body>
+</html>
